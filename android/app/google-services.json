@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "937267774107",
+    "project_id": "travelbasecom",
+    "storage_bucket": "travelbasecom.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:937267774107:android:86ab096ad53e0858227c3e",
+        "android_client_info": {
+          "package_name": "com.example.travelglob"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAoRRf1JDHzIUWH84TZ0igj6UXigGwQ4rw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
