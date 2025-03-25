@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'package:edu_elite/screens/bottomNav.dart';
 import 'package:edu_elite/screens/screen_login.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
@@ -16,9 +18,7 @@ class _ScreenSplashState extends State<ScreenSplash> {
     super.initState();
 
     Timer(Duration(seconds: 3), () {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => ScreenLogin()),
-      );
+      checkUserLoginStatus(context);
     });
   }
 
@@ -60,5 +60,23 @@ class _ScreenSplashState extends State<ScreenSplash> {
         ),
       ),
     );
+  }
+
+  void checkUserLoginStatus(BuildContext context) {
+    User? user = FirebaseAuth.instance.currentUser;
+
+    if (user != null) {
+      // User is logged in, navigate to HomeScreen
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => Bottomnav()),
+      );
+    } else {
+      // User is not logged in, navigate to LoginScreen
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => ScreenLogin()),
+      );
+    }
   }
 }
