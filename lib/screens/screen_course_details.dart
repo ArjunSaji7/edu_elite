@@ -359,7 +359,7 @@ class _ScreenCourseDetailsState extends State<ScreenCourseDetails> {
         'courseId': courseId,
         'courseName': courseName,
         'price': price,
-        'timestamp': FieldValue.serverTimestamp(),
+        'purchasedAt': FieldValue.serverTimestamp(),
       });
 
       return true;

@@ -37,6 +37,9 @@ dependencies:
   curved_navigation_bar: ^1.0.6
   lottie: any
   video_player: any
+  flutter_downloader: any
+  permission_handler: any
+  path_provider: any
 
 
 
