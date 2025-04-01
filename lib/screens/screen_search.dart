@@ -102,7 +102,6 @@ class _ScreenSearchState extends State<ScreenSearch> {
                           builder: (context) => ScreenCourseDetails(courseId: course['courseId']),
                         ),
                       );
-                      // TODO: Navigate to Course Details Screen
                       debugPrint("Tapped on ${course['name']}");
                     },
                   ),
