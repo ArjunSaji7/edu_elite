@@ -142,7 +142,7 @@ class _ScreenCourseDetailsState extends State<ScreenCourseDetails> {
                                   );
                                 } else {
                                   _buyCourse(
-                                      context, widget.courseId, name, price);
+                                      context, widget.courseId, name, price, duration, image);
                                 }
                               },
                               style: ElevatedButton.styleFrom(
@@ -253,7 +253,7 @@ class _ScreenCourseDetailsState extends State<ScreenCourseDetails> {
     );
   }
 
-  void _buyCourse(BuildContext context, String courseId, String courseName, double price) {
+  void _buyCourse(BuildContext context, String courseId, String courseName, double price, int duration, String image) {
     showDialog(
       context: context,
       builder: (modalContext) {
@@ -267,7 +267,7 @@ class _ScreenCourseDetailsState extends State<ScreenCourseDetails> {
             ),
             ElevatedButton(
               onPressed: () async {
-                bool success = await _processPurchase(courseId, courseName, price);
+                bool success = await _processPurchase(courseId, courseName, price, duration, image);
                 if (success) {
                   Navigator.pop(modalContext);
                   setState(() {
@@ -339,7 +339,7 @@ class _ScreenCourseDetailsState extends State<ScreenCourseDetails> {
     );
   }
 
-  Future<bool> _processPurchase(String courseId, String courseName, double price) async {
+  Future<bool> _processPurchase(String courseId, String courseName, double price, int duration, String image) async {
     try {
       FirebaseAuth auth = FirebaseAuth.instance;
       FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -358,7 +358,9 @@ class _ScreenCourseDetailsState extends State<ScreenCourseDetails> {
           .set({
         'courseId': courseId,
         'courseName': courseName,
+        'duration': duration,
         'price': price,
+        'image':image,
         'purchasedAt': FieldValue.serverTimestamp(),
       });
 

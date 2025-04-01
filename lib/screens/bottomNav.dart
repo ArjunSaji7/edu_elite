@@ -1,6 +1,6 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:edu_elite/screens/screen_home.dart';
-import 'package:edu_elite/screens/screen_myCourse.dart';
+import 'package:edu_elite/screens/screen_my_course.dart';
 import 'package:edu_elite/screens/screen_profile.dart';
 import 'package:edu_elite/screens/screen_search.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +18,7 @@ class _BottomnavState extends State<Bottomnav> {
   final List<Widget> _pages = [
     ScreenHome(),
     ScreenSearch(),
-    ScreenMycourse(),
+    ScreenMyCourse(),
     ScreenProfile(),
   ];
 
@@ -28,8 +28,8 @@ class _BottomnavState extends State<Bottomnav> {
       body: _pages[_pageIndex],
       bottomNavigationBar: CurvedNavigationBar(
         backgroundColor: Colors.white,
-        color: Colors.blueAccent,
-        buttonBackgroundColor: Colors.blueAccent,
+        color: Colors.blueAccent.shade400,
+        buttonBackgroundColor: Colors.blueAccent.shade400,
         height: 60,
         animationCurve: Curves.easeIn,
         animationDuration: Duration(milliseconds: 400),
