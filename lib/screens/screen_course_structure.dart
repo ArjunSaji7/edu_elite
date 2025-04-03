@@ -309,7 +309,7 @@ class _ScreenCourseStructureState extends State<ScreenCourseStructure> {
                                           if (totalVideos!= 0 && completedCount == totalVideos) // Add exams after last lesson
                                             GestureDetector(
                                               onTap: () async {
-                                                 // await firestoreService.addQuestionsToFirestore("9hBw9cWas1r0IaNVM4s7", "week2");
+                                                   // await firestoreService.addQuestionsToFirestore("9hBw9cWas1r0IaNVM4s7", "week8");
 
                                                 Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => ScreenExam(courseId: widget.courseId, weekId: 'week${index + 1}'),));
 
@@ -495,6 +495,8 @@ class VideoPlayerWidget extends StatefulWidget {
 class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
   bool _showControls = true;
   Timer? _hideControlsTimer;
+  double _playbackSpeed = 1.0;
+
 
   @override
   void initState() {
@@ -592,6 +594,12 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
       );
     }
   }
+  void _changePlaybackSpeed(double speed) {
+    setState(() {
+      _playbackSpeed = speed;
+      widget.controller.setPlaybackSpeed(speed);
+    });
+  }
 
   @override
   void dispose() {
@@ -669,6 +677,22 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
                       textAlign: TextAlign.center,
                     );
                   },
+                ),
+              ),
+
+            if (_showControls)
+              Positioned(
+                bottom: 10,
+                right: 90,
+                child: PopupMenuButton<double>(
+                  icon: const Icon(Icons.speed, color: Colors.white, size: 30,),
+                  onSelected: _changePlaybackSpeed,
+                  itemBuilder: (context) => [
+                    const PopupMenuItem(value: 0.5, child: Text("0.5x")),
+                    const PopupMenuItem(value: 1.0, child: Text("1.0x")),
+                    const PopupMenuItem(value: 1.5, child: Text("1.5x")),
+                    const PopupMenuItem(value: 2.0, child: Text("2.0x")),
+                  ],
                 ),
               ),
 

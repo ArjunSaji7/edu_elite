@@ -1,3 +1,4 @@
+import 'package:edu_elite/screens/screen_login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -61,7 +62,7 @@ class _ScreenProfileState extends State<ScreenProfile> {
     Navigator.pop(context); // Close bottom sheet
     await FirebaseAuth.instance.signOut();
     // Navigate to login screen or replace with your logic
-    Navigator.pushReplacementNamed(context, '/login');
+    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => ScreenLogin(),));
   }
 
   @override

@@ -40,7 +40,8 @@ class _ScreenExamState extends State<ScreenExam> {
           .doc(widget.courseId)
           .get();
 
-      Map<String, dynamic>? userData = userCourse.data() as Map<String, dynamic>?;
+      Map<String, dynamic>? userData =
+          userCourse.data() as Map<String, dynamic>?;
 
       if (userData != null && userData.containsKey('weeks')) {
         Map<String, dynamic>? weekData = userData['weeks'][widget.weekId];
@@ -63,7 +64,8 @@ class _ScreenExamState extends State<ScreenExam> {
           .collection('questions')
           .get();
 
-      List<Map<String, dynamic>> fetchedQuestions = querySnapshot.docs.map((doc) {
+      List<Map<String, dynamic>> fetchedQuestions =
+          querySnapshot.docs.map((doc) {
         return {
           "id": doc.id,
           "question": doc["question"],
@@ -90,14 +92,16 @@ class _ScreenExamState extends State<ScreenExam> {
   }
 
   void nextQuestion() {
-    if (questions[currentQuestionIndex]["selectedAnswer"] == questions[currentQuestionIndex]["correctAnswer"]) {
+    if (questions[currentQuestionIndex]["selectedAnswer"] ==
+        questions[currentQuestionIndex]["correctAnswer"]) {
       score += 2; // Award 2 points if correct
     }
 
     if (currentQuestionIndex < questions.length - 1) {
       setState(() {
         currentQuestionIndex++;
-        isNextEnabled = questions[currentQuestionIndex]["selectedAnswer"] != null;
+        isNextEnabled =
+            questions[currentQuestionIndex]["selectedAnswer"] != null;
       });
     } else {
       // Show confirmation before submitting
@@ -128,7 +132,8 @@ class _ScreenExamState extends State<ScreenExam> {
     if (currentQuestionIndex > 0) {
       setState(() {
         currentQuestionIndex--;
-        isNextEnabled = questions[currentQuestionIndex]["selectedAnswer"] != null;
+        isNextEnabled =
+            questions[currentQuestionIndex]["selectedAnswer"] != null;
       });
     }
   }
@@ -148,7 +153,8 @@ class _ScreenExamState extends State<ScreenExam> {
           .doc(widget.courseId);
 
       DocumentSnapshot userCourseDoc = await userCourseRef.get();
-      Map<String, dynamic>? userData = userCourseDoc.data() as Map<String, dynamic>?;
+      Map<String, dynamic>? userData =
+          userCourseDoc.data() as Map<String, dynamic>?;
 
       Map<String, dynamic> updatedWeeks = userData?['weeks'] ?? {};
       Map<String, dynamic> currentWeekData = updatedWeeks[widget.weekId] ?? {};
@@ -169,7 +175,8 @@ class _ScreenExamState extends State<ScreenExam> {
         barrierDismissible: false,
         builder: (context) => AlertDialog(
           title: Text(isPassed ? "Congratulations! 🎉" : "Exam Failed"),
-          content: Text("Your score: $score/$totalMarks\nYou have ${isPassed ? "Passed" : "Failed"} the exam."),
+          content: Text(
+              "Your score: $score/$totalMarks\nYou have ${isPassed ? "Passed" : "Failed"} the exam."),
           actions: [
             TextButton(
               onPressed: () {
@@ -210,7 +217,27 @@ class _ScreenExamState extends State<ScreenExam> {
     // ✅ If user already passed, show message instead of questions
     if (hasPassed) {
       return Scaffold(
-        appBar: AppBar(title: const Text("Exam Completed")),
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          backgroundColor: Colors.deepPurple,
+          elevation: 0,
+          title: const Text(
+            "Exam Completed",
+            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+          ),
+          centerTitle: true,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back, color: Colors.white),
+            onPressed: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      ScreenCourseStructure(courseId: widget.courseId),
+                ),
+              );            },
+          ),
+        ),
         body: Center(
           child: Padding(
             padding: const EdgeInsets.all(16.0),
@@ -230,12 +257,14 @@ class _ScreenExamState extends State<ScreenExam> {
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => ScreenCourseStructure(courseId: widget.courseId),
+                        builder: (context) =>
+                            ScreenCourseStructure(courseId: widget.courseId),
                       ),
                     );
                   },
                   style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 24, vertical: 12),
                   ),
                   child: const Text("Back"),
                 ),
@@ -250,18 +279,31 @@ class _ScreenExamState extends State<ScreenExam> {
     final questionData = questions[currentQuestionIndex];
 
     return Scaffold(
-      appBar: AppBar(title: Text("Exam - Question ${currentQuestionIndex + 1}")),
+      backgroundColor: Colors.white,
+      appBar:
+          AppBar(title: Text("Exam - Question ${currentQuestionIndex + 1}")),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            LinearProgressIndicator(value: (currentQuestionIndex + 1) / questions.length),
-            const SizedBox(height: 20),
-            Text(questionData["question"], style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: LinearProgressIndicator(
+                value: (currentQuestionIndex + 1) / questions.length,
+                backgroundColor: Colors.grey[300],
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.deepPurple),
+                minHeight: 10,
+              ),
+            ),
+            Text(questionData["question"],
+                style:
+                    const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
             const SizedBox(height: 20),
             Column(
-              children: (questionData["options"] as Map<String, dynamic>).entries.map((entry) {
+              children: (questionData["options"] as Map<String, dynamic>)
+                  .entries
+                  .map((entry) {
                 return GestureDetector(
                   onTap: () => selectAnswer(entry.key),
                   child: Container(
@@ -269,11 +311,14 @@ class _ScreenExamState extends State<ScreenExam> {
                     padding: const EdgeInsets.all(12),
                     margin: const EdgeInsets.symmetric(vertical: 8),
                     decoration: BoxDecoration(
-                      color: questionData["selectedAnswer"] == entry.key ? Colors.blueAccent : Colors.white,
+                      color: questionData["selectedAnswer"] == entry.key
+                          ? Colors.blueAccent
+                          : Colors.white,
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(color: Colors.black),
                     ),
-                    child: Text("${entry.key}. ${entry.value}", style: const TextStyle(fontSize: 16)),
+                    child: Text("${entry.key}. ${entry.value}",
+                        style: const TextStyle(fontSize: 16)),
                   ),
                 );
               }).toList(),
@@ -282,8 +327,27 @@ class _ScreenExamState extends State<ScreenExam> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                ElevatedButton(onPressed: previousQuestion, child: const Text("Previous")),
-                ElevatedButton(onPressed: isNextEnabled ? nextQuestion : null, child: const Text("Next")),
+                ElevatedButton(
+                    onPressed: previousQuestion,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.grey.shade100, // Button color
+                      foregroundColor: Colors.deepPurple, // Text color
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 24, vertical: 12), // Padding
+                      elevation: 5, // Shadow effect
+                    ),
+                    child: const Text("Previous")),
+                ElevatedButton(
+                  onPressed: isNextEnabled ? nextQuestion : null,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.deepPurple, // Button color
+                    foregroundColor: Colors.white, // Text color
+                    padding: EdgeInsets.symmetric(
+                        horizontal: 24, vertical: 12), // Padding
+                    elevation: 5, // Shadow effect
+                  ),
+                  child: const Text("Next"),
+                ),
               ],
             ),
           ],

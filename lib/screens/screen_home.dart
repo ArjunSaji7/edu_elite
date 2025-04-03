@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:edu_elite/screens/screen_course_details.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class ScreenHome extends StatefulWidget {
@@ -9,11 +10,61 @@ class ScreenHome extends StatefulWidget {
   State<ScreenHome> createState() => _ScreenHomeState();
 }
 
+
+
 class _ScreenHomeState extends State<ScreenHome> {
+
+
+  late String userName = '';
+
+  @override
+  void initState() {
+    super.initState();
+    fetchUserDetails();
+  }
+
+  Future<void> fetchUserDetails() async {
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    final FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+    User? currentUser = auth.currentUser;
+
+    if (currentUser != null) {
+      String userId = currentUser.uid;
+
+      try {
+        DocumentSnapshot userDoc = await firestore.collection('users').doc(userId).get();
+
+        if (userDoc.exists) {
+          Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
+
+          // Combine first name and last name to create userName
+          String firstName = userData['firstName'] ?? '';
+          String lastName = userData['lastName'] ?? '';
+          setState(() {
+            userName = '$firstName $lastName'.trim();
+          });
+
+          // Get user preferences (list of strings)
+          List<String> preferences = List<String>.from(userData['preferences'] ?? []);
+
+          print("User Name: $userName");
+          print("User Preferences: $preferences");
+        } else {
+          print("User document not found.");
+        }
+      } catch (e) {
+        print("Error fetching user details: $e");
+      }
+    } else {
+      print("No user is currently signed in.");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[100], // Light background
+      backgroundColor: Colors.white, // Light background
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -38,7 +89,7 @@ class _ScreenHomeState extends State<ScreenHome> {
                             ),
                             SizedBox(width: 5),
                             Text(
-                              'Hello, Leo',
+                              'Hello, $userName',
                               style: TextStyle(
                                 fontSize: 26,
                                 fontWeight: FontWeight.bold,
@@ -96,8 +147,15 @@ class _ScreenHomeState extends State<ScreenHome> {
 
   // Course List Widget
   Widget courseList() {
-    return SizedBox(
+    return Container(
       height: 150,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+        colors: [Colors.white, Colors.grey.shade300],
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+      ),
+      ),
       child: StreamBuilder(
         stream: FirebaseFirestore.instance.collection('courses').snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -111,6 +169,7 @@ class _ScreenHomeState extends State<ScreenHome> {
           var courses = snapshot.data?.docs ?? [];
 
           return ListView.separated(
+            padding: EdgeInsets.all(5),
             scrollDirection: Axis.horizontal,
             itemCount: courses.length,
             itemBuilder: (context, index) {
